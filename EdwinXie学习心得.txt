@@ -1,1 +1,107 @@
-在工作中体现
+GIT
+
+创建版本库
+mkdir gittest
+cd gittest
+
+创建global用户
+git config --global user.email "edwin.xie@git.com"
+git config --global user.name "edwin.xie"
+
+初始化git仓库
+$git init
+Initialized empty Git repository in /home/git/gittest/.git/
+
+添加文件
+$ git add test.txt
+
+提交到仓库
+$ git commit -m "wrote a test file"
+
+查看仓库里面文件状态
+$ git status
+
+查看被修改的文件具体变化
+$ git diff test.txt
+
+提交修改和添加文件步骤一致
+
+查看历史操作记录
+$ git log  //可以列出历史操作记录和版本id
+
+回退到上一个版本
+$ git reset --hard HEAD~1        //后面数字表示上几个版本
+
+回退到指定版本
+$ git reset --hard 版本id(例如：d89cc6919ab0553f9ac220377ecf7944c298676e)
+
+查找历史记录命令(包含了版本号)
+$ git reflog
+
+未提交前的git文件是存放在暂存区(stage)的
+
+撤销修改
+$ git checkout -- test.txt  //只在工作区修改了文件内容，可以用此命令
+$ git reset HEAD test.txt  //如果add了，那就需要此命令来撤销
+
+删除
+$ git rm test.txt
+$ git commit -m "delete test.txt"
+
+同步代码到github中
+打开git bash
+$ ssh-keygen -t rsa -C "你的github账号"
+在用户主目录中会生成id_rsa.pub的公钥(windows在users下面)
+登陆GitHub->Account setting->SSH key -> Add SSH Key -> Key文本中粘贴 id_rsa.pub
+GitHub新建仓库 GitHub->New repository
+本地关联GitHub
+$ git remote add origin git@github.com:#你的github用户名#/gittest.git
+推送本地内容到远程库
+$ git push -u origin master
+
+从远程库克隆数据（不同协议传输）
+$ git clone git@github.com:EdwinRoyXie/gitskill.git           //ssh
+$ git clone http://github.com/EdwinRoyXie/gitskill.git        //http
+$ git clone https://github.com/EdwinRoyXie/gitskill.git        //https
+
+分支管理
+切换并创建dev分支
+$ git checkout -b dev   //-b表示创建并切换到分支
+查看分支
+$ git branch  //当前分支会加*并标绿
+切换分支
+$ git checkout master
+合并分支
+$ git merge dev   //把dev分支的更新合并到当前分支来
+删除分支
+$ git branch -d dev
+关闭fast forward模式合并分支
+$ git merge --no-ff -m "merge with no-ff" dev
+强行删除分支
+$ git branch -D dev
+
+BUG分支管理
+分支未完成没法提交，stash储藏起来
+$ git stash
+删除stash
+$ git stash drop
+恢复stash
+$ git stash apply
+恢复并删除stash
+$ git stash pop
+
+多人协作的工作模式通常是这样：
+首先，可以试图用git push origin branch-name推送自己的修改；
+如果推送失败，则因为远程分支比你的本地更新，需要先用git pull试图合并；
+如果合并有冲突，则解决冲突，并在本地提交；
+没有冲突或者解决掉冲突后，再用git push origin branch-name推送就能成功！
+
+标签管理
+创建标签
+$ git tag v1.0
+查看标签
+$ git tag
+对某个特定版本打标签
+$ git log --pretty=oneline --abbrev-commit            //找出需要打tag的版本号
+$ git tag v0.9 622E434          //通过版本号打tag
+$ git tag -a v0.1 -m "version 0.1 released" 622e434       //打tag时添加描述
